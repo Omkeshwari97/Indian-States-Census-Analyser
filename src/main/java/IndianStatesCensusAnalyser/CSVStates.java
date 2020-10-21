@@ -9,25 +9,25 @@ import java.util.Iterator;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
-public class CensusAnalyser 
+public class CSVStates 
 {
-	public int loadIndiaStateCensus(String csvFilePath) throws IOException, CensusAnalyserException
+	public int loadIndiaStatesCodeData(String csvFilePath) throws IOException, CensusAnalyserException
 	{
 		try 
 		{
 			Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
-			CsvToBeanBuilder<IndiaCensusCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-			csvToBeanBuilder.withType(IndiaCensusCSV.class);
+			CsvToBeanBuilder<IndianStateCodeCsv> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+			csvToBeanBuilder.withType(IndianStateCodeCsv.class);
 			csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-			CsvToBean<IndiaCensusCSV> csvToBean = csvToBeanBuilder.build();
-			Iterator<IndiaCensusCSV> censusCSVIterator = csvToBean.iterator();
+			CsvToBean<IndianStateCodeCsv> csvToBean = csvToBeanBuilder.build();
+			Iterator<IndianStateCodeCsv> censusCSVIterator = csvToBean.iterator();
 			
 			int numOfEntries = 0;
 			
 			while(censusCSVIterator.hasNext())
 			{
 				numOfEntries++;
-				IndiaCensusCSV censusDate = censusCSVIterator.next();
+				IndianStateCodeCsv censusDate = censusCSVIterator.next();
 			}
 			
 			return numOfEntries;
