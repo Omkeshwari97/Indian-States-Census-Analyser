@@ -9,6 +9,9 @@ import org.junit.Test;
 public class CensusAnalyserTest 
 {
 	private static final String INDIAN_CENSUS_CSV_FILE_PATH = "C:\\Users\\omkes\\eclipse-workspace\\IndianStatesCensusAnalyser\\IndiaStateCensusData.csv";
+	private static final String INDIAN_CENSUS_WRONG_CSV_FILE_PATH = "C:\\Users\\omkes\\eclipse-workspace\\IndianStatesCensusAnalyser\\IndiaStateCensusDat.csv";
+	private static final String INDIAN_CENSUS_WRONG_CSV_FILE_EXTENSION = "C:\\Users\\omkes\\eclipse-workspace\\IndianStatesCensusAnalyser\\IndiaStateCensusData.txt";
+	private static final String US_CENSUS_CSV_FILE_PATH = "C:\\Users\\omkes\\eclipse-workspace\\IndianStatesCensusAnalyser\\USCensusData.csv";
 	private static final String INDIAN_STATE_CODE_CSV_FILE_PATH = "C:\\Users\\omkes\\eclipse-workspace\\IndianStatesCensusAnalyser\\IndiaStateCode.csv";
 	
 	@Test
@@ -20,7 +23,70 @@ public class CensusAnalyserTest
 			int numOfRecords = censusAnalyser.loadIndiaStateCensus(INDIAN_CENSUS_CSV_FILE_PATH);
 			assertEquals(29, numOfRecords);
 		}
-		catch (CensusAnalyserException e) {	}
+		catch (CensusAnalyserException e) 
+		{	
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void givenIndianCensusCSVFile_IfIncorrect_ShoudThrowException() throws IOException
+	{
+		try
+		{
+			CensusAnalyser censusAnalyser = new CensusAnalyser();
+			int numOfRecords = censusAnalyser.loadIndiaStateCensus(INDIAN_CENSUS_WRONG_CSV_FILE_PATH);
+		}
+		catch (CensusAnalyserException e) 
+		{	
+			e.printStackTrace();
+			assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+		}
+	}
+	
+	@Test
+	public void givenIndianCensusCSVFile_IfIncorrectExtension_ShoudThrowException() throws IOException
+	{
+		try
+		{
+			CensusAnalyser censusAnalyser = new CensusAnalyser();
+			int numOfRecords = censusAnalyser.loadIndiaStateCensus(INDIAN_CENSUS_WRONG_CSV_FILE_EXTENSION);
+		}
+		catch (CensusAnalyserException e) 
+		{	
+			e.printStackTrace();
+			assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+		}
+	}
+	
+	@Test
+	public void givenIndianCensusCSVFile_IfIncorrectDelimiter_ShoudThrowException() throws IOException
+	{
+		try
+		{
+			CensusAnalyser censusAnalyser = new CensusAnalyser();
+			int numOfRecords = censusAnalyser.loadIndiaStateCensus(INDIAN_CENSUS_CSV_FILE_PATH);
+		}
+		catch (CensusAnalyserException e) 
+		{	
+			e.printStackTrace();
+			assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+		}
+	}
+	
+	@Test
+	public void givenIndianCensusCSVFile_IfIncorrectHeader_ShoudThrowException() throws IOException
+	{
+		try
+		{
+			CensusAnalyser censusAnalyser = new CensusAnalyser();
+			int numOfRecords = censusAnalyser.loadIndiaStateCensus(US_CENSUS_CSV_FILE_PATH);
+		}
+		catch (CensusAnalyserException e) 
+		{	
+			e.printStackTrace();
+			assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+		}
 	}
 	
 	@Test
