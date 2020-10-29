@@ -1,7 +1,5 @@
 package IndianStatesCensusAnalyser;
 
-import IndianStatesCensusAnalyser.CensusAnalyserException.ExceptionType;
-
 public class CSVBuilderException extends Exception
 {
 	enum ExceptionType
