@@ -13,7 +13,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 public class CensusAnalyser 
 {
-	public int loadIndiaStateCensus(String csvFilePath) throws IOException, CensusAnalyserException
+	public int loadIndiaStateCensus(String csvFilePath) throws IOException, CSVBuilderException
 	{
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) 
 		{
@@ -24,17 +24,17 @@ public class CensusAnalyser
 		} 
 		catch (NoSuchFileException e) 
 		{
-			throw new CensusAnalyserException(e.getMessage(),
-					CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+			throw new CSVBuilderException(e.getMessage(),
+					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
 		} 
-		catch (CensusAnalyserException e) 
+		catch (CSVBuilderException e) 
 		{
-			throw new CensusAnalyserException(e.getMessage(),
-					CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+			throw new CSVBuilderException(e.getMessage(),
+					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
 		}
 	}
 	
-	public int loadIndiaStatesCodeData(String csvFilePath) throws IOException, CensusAnalyserException
+	public int loadIndiaStatesCodeData(String csvFilePath) throws IOException, CSVBuilderException
 	{
 		
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) 
@@ -46,13 +46,13 @@ public class CensusAnalyser
 		} 
 		catch (NoSuchFileException e) 
 		{
-			throw new CensusAnalyserException(e.getMessage(),
-					CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+			throw new CSVBuilderException(e.getMessage(),
+					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
 		} 
-		catch (CensusAnalyserException e) 
+		catch (CSVBuilderException e) 
 		{
-			throw new CensusAnalyserException(e.getMessage(),
-					CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+			throw new CSVBuilderException(e.getMessage(),
+					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
 		}
 	}
 	
