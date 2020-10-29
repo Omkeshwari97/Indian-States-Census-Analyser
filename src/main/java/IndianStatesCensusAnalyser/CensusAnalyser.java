@@ -15,8 +15,8 @@ public class CensusAnalyser
 {
 	public int loadIndiaStateCensus(String csvFilePath) throws IOException, CensusAnalyserException
 	{
-		try {
-			Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) 
+		{
 			
 			Iterator<IndiaCensusCSV> censusCSVIterator = this.getCSVFileIterator(reader, IndiaCensusCSV.class);
 				
@@ -45,8 +45,8 @@ public class CensusAnalyser
 	public int loadIndiaStatesCodeData(String csvFilePath) throws IOException, CensusAnalyserException
 	{
 		
-		try {
-			Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) 
+		{
 				
 			Iterator<IndianStateCodeCsv> censusCSVIterator = this.getCSVFileIterator(reader, IndianStateCodeCsv.class);
 				
