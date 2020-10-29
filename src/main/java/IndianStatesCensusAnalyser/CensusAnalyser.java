@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.stream.StreamSupport;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -19,16 +20,8 @@ public class CensusAnalyser
 		{
 			
 			Iterator<IndiaCensusCSV> censusCSVIterator = this.getCSVFileIterator(reader, IndiaCensusCSV.class);
-				
-			int numOfEntries = 0;
-				
-			while(censusCSVIterator.hasNext())
-			{
-				numOfEntries++;
-				IndiaCensusCSV censusDate = censusCSVIterator.next();
-			}
-				
-			return numOfEntries;
+			
+			return this.getCount(censusCSVIterator);
 		} 
 		catch (NoSuchFileException e) 
 		{
@@ -50,15 +43,7 @@ public class CensusAnalyser
 				
 			Iterator<IndianStateCodeCsv> censusCSVIterator = this.getCSVFileIterator(reader, IndianStateCodeCsv.class);
 				
-			int numOfEntries = 0;
-				
-			while(censusCSVIterator.hasNext())
-			{
-				numOfEntries++;
-				IndianStateCodeCsv censusDate = censusCSVIterator.next();
-			}
-				
-			return numOfEntries;
+			return this.getCount(censusCSVIterator);
 		} 
 		catch (NoSuchFileException e) 
 		{
@@ -70,6 +55,13 @@ public class CensusAnalyser
 			throw new CensusAnalyserException(e.getMessage(),
 					CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
 		}
+	}
+	
+	public <E> int getCount(Iterator<E> iterator)
+	{
+		Iterable<E> csvIterable = () -> iterator;
+		int numOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
+		return numOfEntries;
 	}
 	
 	public <E> Iterator<E> getCSVFileIterator(Reader reader, Class<E> csvClass) throws IOException, CensusAnalyserException
