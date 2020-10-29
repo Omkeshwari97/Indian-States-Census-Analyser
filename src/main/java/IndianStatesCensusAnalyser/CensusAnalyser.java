@@ -1,6 +1,5 @@
 package IndianStatesCensusAnalyser;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -18,8 +17,7 @@ public class CensusAnalyser
 	{
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) 
 		{
-			
-			Iterator<IndiaCensusCSV> censusCSVIterator = this.getCSVFileIterator(reader, IndiaCensusCSV.class);
+			Iterator<IndiaCensusCSV> censusCSVIterator = new OpenCSVBuilder().getCSVFileIterator(reader, IndiaCensusCSV.class);
 			
 			return this.getCount(censusCSVIterator);
 		} 
@@ -41,7 +39,7 @@ public class CensusAnalyser
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) 
 		{
 				
-			Iterator<IndianStateCodeCsv> censusCSVIterator = this.getCSVFileIterator(reader, IndianStateCodeCsv.class);
+			Iterator<IndianStateCodeCsv> censusCSVIterator = new OpenCSVBuilder().getCSVFileIterator(reader, IndianStateCodeCsv.class);
 				
 			return this.getCount(censusCSVIterator);
 		} 
@@ -60,25 +58,8 @@ public class CensusAnalyser
 	public <E> int getCount(Iterator<E> iterator)
 	{
 		Iterable<E> csvIterable = () -> iterator;
-		int numOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
+		int numOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false)
+							.count();
 		return numOfEntries;
-	}
-	
-	public <E> Iterator<E> getCSVFileIterator(Reader reader, Class<E> csvClass) throws IOException, CensusAnalyserException
-	{
-		try 
-		{
-			CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder(reader);
-			csvToBeanBuilder.withType(csvClass);
-			csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-			CsvToBean<E> csvToBean = csvToBeanBuilder.build();
-			return csvToBean.iterator();
-			
-		} 
-		catch(RuntimeException e)
-		{
-			throw new CensusAnalyserException(e.getMessage(),
-					CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
-		}
 	}
 }
