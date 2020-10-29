@@ -17,7 +17,8 @@ public class CensusAnalyser
 	{
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) 
 		{
-			Iterator<IndiaCensusCSV> censusCSVIterator = new OpenCSVBuilder().getCSVFileIterator(reader, IndiaCensusCSV.class);
+			ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+			Iterator<IndiaCensusCSV> censusCSVIterator = csvBuilder.getCSVFileIterator(reader, IndiaCensusCSV.class);
 			
 			return this.getCount(censusCSVIterator);
 		} 
