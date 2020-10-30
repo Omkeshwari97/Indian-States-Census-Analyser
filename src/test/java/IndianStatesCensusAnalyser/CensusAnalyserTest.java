@@ -7,6 +7,9 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
 public class CensusAnalyserTest 
 {
 	private static final String INDIAN_CENSUS_CSV_FILE_PATH = "C:\\Users\\omkes\\eclipse-workspace\\IndianStatesCensusAnalyser\\IndiaStateCensusData.csv";
@@ -161,6 +164,23 @@ public class CensusAnalyserTest
 		{	
 			e.printStackTrace();
 			assertEquals(CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+		}
+	}
+	
+	@Test
+	public void givenIndianCensusData_WhenSortedOnState_ShoudReturnSortedResult() throws CensusAnalyserException, IOException, CSVBuilderException
+	{
+		try {
+			CensusAnalyser censusAnalyser = new CensusAnalyser();
+			censusAnalyser.loadIndiaStateCensus(INDIAN_CENSUS_CSV_FILE_PATH);
+			String sortedCensusData = censusAnalyser.getStateWiseSortedCensusData(INDIAN_CENSUS_CSV_FILE_PATH);
+			IndiaCensusCSV[] censusCSV = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
+			assertEquals("Andhra Pradesh", censusCSV[0].state);
+			assertEquals("West Bengal", censusCSV[28].state);
+		}  
+		catch (CensusAnalyserException e) 
+		{
+			e.printStackTrace();
 		}
 	}
 

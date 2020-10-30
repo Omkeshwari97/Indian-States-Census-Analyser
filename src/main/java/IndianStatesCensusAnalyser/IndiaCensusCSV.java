@@ -4,16 +4,16 @@ import com.opencsv.bean.CsvBindByName;
 
 public class IndiaCensusCSV 
 {
-	@CsvBindByName
-	private String state;
+	@CsvBindByName 
+	public String state;
 	
 	@CsvBindByName
-	private long population;
+	public long population;
 	
 	@CsvBindByName
-	private long area;
+	public long area;
 	
 	@CsvBindByName
-	private int density;
+	public int density;
 	
 }
