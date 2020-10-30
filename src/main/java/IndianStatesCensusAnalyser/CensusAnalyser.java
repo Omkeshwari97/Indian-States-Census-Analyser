@@ -83,7 +83,7 @@ public class CensusAnalyser
 		}
 		
 		Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.state);
-		this.sortIndiaCensus(censusComparator);
+		this.sortIndiaCensusAsc(censusComparator);
 		String sortedStateCensusJson = new Gson().toJson(censusCSVList);
 		return sortedStateCensusJson;
 	}
@@ -96,12 +96,43 @@ public class CensusAnalyser
 		}
 		
 		Comparator<IndianStateCodeCsv> censusComparator = Comparator.comparing(census -> census.stateCode);
-		this.sortStateCensus(censusComparator);
+		this.sortStateCensusAsc(censusComparator);
 		String sortedStateCensusJson = new Gson().toJson(stateCodeCSVList);
 		return sortedStateCensusJson;
 	}
+	
+	public String getPopulationWiseSortedCensusData(String indianCensusCsvFilePath) throws CensusAnalyserException 
+	{
+		if(censusCSVList == null || censusCSVList.size() == 0)
+		{
+			throw new CensusAnalyserException("No census data", ExceptionType.NO_CENSUS_DATA);
+		}
+		
+		Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.population);
+		this.sortIndiaCensusDesc(censusComparator);
+		String sortedStateCensusJson = new Gson().toJson(censusCSVList);
+		return sortedStateCensusJson;
+	}
 
-	private void sortIndiaCensus(Comparator<IndiaCensusCSV> censusComparator) 
+	private void sortIndiaCensusDesc(Comparator<IndiaCensusCSV> censusComparator) 
+	{
+		for (int i = 0; i < censusCSVList.size()-1; i++) 
+		{	
+            for (int j = 0; j < censusCSVList.size()-i-1; j++) 
+            {
+            	IndiaCensusCSV census1 = censusCSVList.get(j);
+            	IndiaCensusCSV census2 = censusCSVList.get(j+1);
+            	
+                if (censusComparator.compare(census1, census2) < 0) 
+                { 
+                	censusCSVList.set(j, census2);
+                	censusCSVList.set(j+1, census1);
+                } 
+            }
+		}
+	}
+
+	private void sortIndiaCensusAsc(Comparator<IndiaCensusCSV> censusComparator) 
 	{
 		for (int i = 0; i < censusCSVList.size()-1; i++) 
 		{	
@@ -119,7 +150,7 @@ public class CensusAnalyser
 		}
 	}
 	
-	private void sortStateCensus(Comparator<IndianStateCodeCsv> censusComparator) 
+	private void sortStateCensusAsc(Comparator<IndianStateCodeCsv> censusComparator) 
 	{
 		for (int i = 0; i < stateCodeCSVList.size()-1; i++) 
 		{	
