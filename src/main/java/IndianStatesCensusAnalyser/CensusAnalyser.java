@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class CensusAnalyser 
@@ -15,9 +16,9 @@ public class CensusAnalyser
 		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) 
 		{
 			ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-			Iterator<IndiaCensusCSV> censusCSVIterator = csvBuilder.getCSVFileIterator(reader, IndiaCensusCSV.class);
+			List<IndiaCensusCSV> censusCSVList = csvBuilder.getCSVFileList(reader, IndiaCensusCSV.class);
 			
-			return this.getCount(censusCSVIterator);
+			return censusCSVList.size();
 		} 
 		catch (NoSuchFileException e) 
 		{
@@ -47,6 +48,11 @@ public class CensusAnalyser
 					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
 		} 
 		catch (CSVBuilderException e) 
+		{
+			throw new CSVBuilderException(e.getMessage(),
+					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
+		}
+		catch (RuntimeException e)
 		{
 			throw new CSVBuilderException(e.getMessage(),
 					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
