@@ -183,5 +183,23 @@ public class CensusAnalyserTest
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void givenIndianStateCodeCSVFile_WhenSortedOnStateCode_ShoudReturnSortedResult() throws CensusAnalyserException, IOException, CSVBuilderException
+	{
+		try {
+			CensusAnalyser censusAnalyser = new CensusAnalyser();
+			censusAnalyser.loadIndiaStatesCodeData(INDIAN_STATE_CODE_CSV_FILE_PATH);
+			String sortedCensusData = censusAnalyser.getStateCodeWiseSortedCensusData(INDIAN_STATE_CODE_CSV_FILE_PATH);
+			IndianStateCodeCsv[] censusCSV = new Gson().fromJson(sortedCensusData, IndianStateCodeCsv[].class);
+			System.out.println(censusCSV[0] +""+ censusCSV[36]);
+			assertEquals("AD", censusCSV[0].stateCode);
+			assertEquals("WB", censusCSV[36].stateCode);
+		}  
+		catch (CensusAnalyserException e) 
+		{
+			e.printStackTrace();
+		}
+	}
 
 }
