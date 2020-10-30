@@ -38,6 +38,11 @@ public class CensusAnalyser
 			throw new CSVBuilderException(e.getMessage(),
 					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
 		}
+		catch (RuntimeException e)
+		{
+			throw new CSVBuilderException(e.getMessage(),
+					CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM);
+		}
 	}
 	
 	public int loadIndiaStatesCodeData(String csvFilePath) throws IOException, CSVBuilderException
@@ -113,6 +118,19 @@ public class CensusAnalyser
 		String sortedStateCensusJson = new Gson().toJson(censusCSVList);
 		return sortedStateCensusJson;
 	}
+	
+	public String getPopulationDensityWiseSortedCensusData(String indianCensusCsvFilePath) throws CensusAnalyserException
+	{
+		if(censusCSVList == null || censusCSVList.size() == 0)
+		{
+			throw new CensusAnalyserException("No census data", ExceptionType.NO_CENSUS_DATA);
+		}
+		
+		Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.density);
+		this.sortIndiaCensusDesc(censusComparator);
+		String sortedStateCensusJson = new Gson().toJson(censusCSVList);
+		return sortedStateCensusJson;
+	}
 
 	private void sortIndiaCensusDesc(Comparator<IndiaCensusCSV> censusComparator) 
 	{
@@ -168,5 +186,4 @@ public class CensusAnalyser
 		}
 		
 	}
-
 }
